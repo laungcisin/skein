@@ -188,38 +188,74 @@ cmdclass.update({'build_java': build_java,    # directly build the java source
                  'develop': develop,          # python setup.py develop
                  'clean': clean})             # extra cleanup
 
-
+# MANIFEST.in 文件，来控制文件的分发
+# MANIFEST.in 需要放在和 setup.py 同级的顶级目录下，setuptools 会自动读取该文件
+# 所有根目录下的以 txt 为后缀名的文件，都会分发
+# 根目录下的 examples 目录 和 txt、py文件都会分发
+# 路径匹配上 examples/sample?/build 不会分发
+# 包名称
 setup(name='skein',
+      # 包版本
       version=VERSION,
+      # 添加自定义命令
       cmdclass=cmdclass,
+      # 维护者
       maintainer='Jim Crist-Harif',
+      # 维护者的邮箱地址
       maintainer_email='jcristharif@gmail.com',
+      # 程序的授权信息
       license='BSD',
+      # 程序的简单描述
       description=('A simple tool and library for deploying applications on '
                    'Apache YARN'),
+      # 程序的详细描述
       long_description=(open('README.rst').read()
                         if os.path.exists('README.rst') else ''),
+      # 程序的官网地址
       url="https://jcristharif.com/skein/",
       project_urls={"Documentation": "https://jcristharif.com/skein/",
                     "Source": "https://github.com/jcrist/skein/",
                     "Issue Tracker": "https://github.com/jcrist/skein/issues"},
-      classifiers=["Development Status :: 5 - Production/Stable",
+      # 程序的所属分类列表
+      classifiers=[
+                   # 发展时期,常见的如下
+                   # 3 - Alpha
+                   # 4 - Beta
+                   # 5 - Production/Stable
+                   "Development Status :: 5 - Production/Stable",
+                   # 许可证信息
                    "License :: OSI Approved :: BSD License",
+                   # 目标语言及版本
                    "Programming Language :: Java",
                    "Programming Language :: Python :: 3.5",
                    "Programming Language :: Python :: 3.6",
                    "Programming Language :: Python :: 3.7",
+                   # 属于什么类型
                    "Topic :: Software Development :: Libraries :: Java Libraries",
                    "Topic :: System :: Systems Administration",
                    "Topic :: System :: Distributed Computing"],
+      # 程序的关键字列表
       keywords='YARN HDFS hadoop distributed cluster',
+      # 需要处理的包目录（包含__init__.py的文件夹）
       packages=['skein', 'skein.proto', 'skein.recipes'],
+      # 希望被打包的文件
       package_data={'skein': ['java/*.jar']},
+      # 用来支持自动生成脚本，安装后会自动生成 /usr/bin/skein 的可执行文件
+      # console_scripts 指明了命令行工具的名称
+      # 添加这个选项，在windows下Python目录的scripts下生成exe文件
+      #
+      # 该文件入口指向 skein/cli.py 的main 函数
+      #     console_scripts 指明了命令行工具的名称
+      #     等号前面指明了工具包的名称，等号后面的内容指明了程序的入口地址
       entry_points='''
         [console_scripts]
         skein=skein.cli:main
       ''',
+      # 表明当前模块依赖哪些包，若环境中没有，则会从pypi中下载安装
       install_requires=install_requires,
+      # setup.py 本身要依赖的包，这通常是为一些setuptools的插件准备的配置
       setup_requires=setup_requires,
+      # python版本要求
       python_requires=">=3.5",
+      # 不压缩包，而是以目录的形式安装
       zip_safe=False)
