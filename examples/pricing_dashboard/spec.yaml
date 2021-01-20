@@ -1,7 +1,17 @@
 name: dashboard
+queue: default
+
+master:
+    resources:
+        memory: 256 MiB
+        vcores: 1
+    log_level: debug
 
 services:
     dashboard:
+        # Start 2 instances
+        instances: 2
+
         resources:
             vcores: 1
             memory: 256 MiB
@@ -12,8 +22,8 @@ services:
             environment: environment.tar.gz
             # The dashboard implementation.
             dashboard.py: dashboard.py
-        commands:
+        script: |
             # Activate the conda or virtual environment
-            - source environment/bin/activate
+            source environment/bin/activate
             # Start the dashboard
-            - python dashboard.py
+            python dashboard.py

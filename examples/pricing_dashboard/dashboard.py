@@ -1,4 +1,6 @@
 import socket
+import uuid
+
 from collections import deque
 
 import numpy as np
@@ -240,8 +242,9 @@ if __name__ == '__main__':
     # Register the page with the Skein Web UI.
     # This is the only Skein-specific bit
     app = skein.ApplicationClient.from_current()
-    app.ui.add_page('price-dashboard', address,
-                    link_name='Price Dashboard')
+    uuid_str = str(uuid.uuid1())
+    app.ui.add_page('price-dashboard-' + uuid_str, address,
+                    link_name='Price Dashboard ' + uuid_str)
 
     # Register a callback to update the plot every INTERVAL milliseconds
     pc = PeriodicCallback(model.update, INTERVAL)
