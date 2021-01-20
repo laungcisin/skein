@@ -262,6 +262,8 @@ public class Driver {
     }
 
     conf = new YarnConfiguration();
+    // set am retry to a lot of times
+    conf.set(YarnConfiguration.RM_AM_MAX_ATTEMPTS, "99");
 
     // Build the classpath for running the appmaster
     StringBuilder cpBuilder = new StringBuilder(Environment.CLASSPATH.$$());
